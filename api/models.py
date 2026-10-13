@@ -33,7 +33,7 @@ class FootballClub(models.Model):
     city = models.CharField(max_length=100)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     league = models.ForeignKey(League, on_delete=models.CASCADE)
-    characteristics = models.ManyToManyField(Characteristic)
+    characteristic = models.ManyToManyField(Characteristic)
     created_at = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 

@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from rest_framework import viewsets, permissions
-from .serializers import *
-from .models import *
+from .serializers import * 
+from .models import * 
 from rest_framework.response import Response
 
-class CountryViewSet(viewsets.ModelViewSet):
+class CountryViewSet(viewsets.ViewSet):
     permission_classes = [permissions.AllowAny]
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
@@ -13,8 +13,9 @@ class CountryViewSet(viewsets.ModelViewSet):
         queryset = Country.objects.all()
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
-    
-class LeagueViewSet(viewsets.ModelViewSet):
+
+
+class LeagueViewSet(viewsets.ViewSet):
     permission_classes = [permissions.AllowAny]
     queryset = League.objects.all()
     serializer_class = LeagueSerializer
@@ -24,7 +25,7 @@ class LeagueViewSet(viewsets.ModelViewSet):
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
-class CharacteristicViewSet(viewsets.ModelViewSet):
+class CharacteristicViewSet(viewsets.ViewSet):
     permission_classes = [permissions.AllowAny]
     queryset = Characteristic.objects.all()
     serializer_class = CharacteristicSerializer
@@ -34,13 +35,16 @@ class CharacteristicViewSet(viewsets.ModelViewSet):
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
-class FootballClubViewSet(viewsets.ModelViewSet):
+
+class FootballClubViewSet(viewsets.ViewSet): 
     permission_classes = [permissions.AllowAny]
     queryset = FootballClub.objects.all()
     serializer_class = FootballClubSerializer
 
-    def list(self, request):
-        queryset = FootballClub.objects.all()
-        serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
-    
+    def create(self,request): 
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
